@@ -11,6 +11,7 @@ import           Prelude
 
 import           "contra-tracer" Control.Tracer (traceWith)
 import           "trace-dispatcher" Control.Tracer (nullTracer)
+import           Data.Aeson (ToJSON)
 import qualified Data.Map as Map
 import           Data.Maybe (fromMaybe)
 import           Data.Time.Clock (getCurrentTime)
@@ -22,6 +23,7 @@ import           Network.Mux.Trace (TraceLabelPeer (..))
 import           Ouroboros.Consensus.Ledger.Inspect (LedgerEvent)
 import           Ouroboros.Consensus.MiniProtocol.ChainSync.Client (TraceChainSyncClientEvent)
 import           Ouroboros.Consensus.Node (NetworkP2PMode, RunNode)
+import           Ouroboros.Consensus.Node.NetworkProtocolVersion
 import           Ouroboros.Network.ConnectionId (ConnectionId)
 import           Ouroboros.Network.Magic (NetworkMagic)
 import           Ouroboros.Network.NodeToClient (withIOManager)
@@ -45,6 +47,8 @@ initTraceDispatcher ::
   forall blk p2p.
   ( RunNode blk
   , TraceConstraints blk
+  , ToJSON (BlockNodeToClientVersion blk)
+  , ToJSON (BlockNodeToNodeVersion blk)
   , LogFormatting (LedgerEvent blk)
   , LogFormatting
     (TraceLabelPeer (ConnectionId RemoteAddress) (TraceChainSyncClientEvent blk))

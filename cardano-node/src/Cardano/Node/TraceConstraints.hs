@@ -26,6 +26,8 @@ import           Ouroboros.Consensus.Ledger.Inspect (LedgerEvent, LedgerUpdate,
                      LedgerWarning)
 import           Ouroboros.Consensus.Ledger.SupportsMempool (ApplyTxErr,
                      HasTxId, HasTxs (..))
+import           Ouroboros.Consensus.Node.NetworkProtocolVersion
+                     (BlockNodeToClientVersion, BlockNodeToNodeVersion)
 import           Ouroboros.Consensus.Protocol.Abstract (ValidationErr)
 import           Ouroboros.Consensus.Shelley.Ledger.Mempool (GenTx, TxId)
 import qualified Ouroboros.Consensus.Storage.ChainDB as ChainDB
@@ -39,7 +41,9 @@ type TraceConstraints blk =
     , HasTxId (GenTx blk)
     , LedgerQueries blk
     , StandardHash blk
-    , ToJSON   (TxId (GenTx blk))
+    , ToJSON (BlockNodeToClientVersion blk)
+    , ToJSON (BlockNodeToNodeVersion blk)
+    , ToJSON (TxId (GenTx blk))
     , HasKESMetricsData blk
     , HasKESInfo blk
     , ConvertRawHash blk
